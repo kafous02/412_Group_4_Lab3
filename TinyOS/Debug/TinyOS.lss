@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 00000080  00000000  00000000  00000638  2**3
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000e99  00000000  00000000  000006b8  2**0
+  6 .debug_info   00000e8c  00000000  00000000  000006b8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000009c9  00000000  00000000  00001551  2**0
+  7 .debug_abbrev 000009c9  00000000  00000000  00001544  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000709  00000000  00000000  00001f1a  2**0
+  8 .debug_line   00000709  00000000  00000000  00001f0d  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000000c8  00000000  00000000  00002624  2**2
+  9 .debug_frame  000000c8  00000000  00000000  00002618  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000004d0  00000000  00000000  000026ec  2**0
+ 10 .debug_str    000004d0  00000000  00000000  000026e0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000000f7  00000000  00000000  00002bbc  2**0
+ 11 .debug_loc    000000f7  00000000  00000000  00002bb0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000050  00000000  00000000  00002cb3  2**0
+ 12 .debug_ranges 00000050  00000000  00000000  00002ca7  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -120,52 +120,52 @@ Disassembly of section .text:
   ee:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 000000f2 <Mega328P_Init>:
-.set	temp,0				//student comment here
+.set	temp,0				//Sets the value of temp to 0, can be changed later
 
-.section ".text"			//student comment here
+.section ".text"			//Defines a new section called .text
 .global Mega328P_Init
 Mega328P_Init:
 		ldi	r16,0x07		;PB0(R*W),PB1(RS),PB2(E) as fixed outputs
   f2:	07 e0       	ldi	r16, 0x07	; 7
-		out	DDRB,r16		//student comment here
+		out	DDRB,r16		//Sets all bits of Port B to outputs
   f4:	04 b9       	out	0x04, r16	; 4
-		ldi	r16,0			//student comment here
+		ldi	r16,0			//Zeroes the r16 register
   f6:	00 e0       	ldi	r16, 0x00	; 0
-		out	PORTB,r16		//student comment here
+		out	PORTB,r16		//Sets all of Port B to zero
   f8:	05 b9       	out	0x05, r16	; 5
 		out	U2X0,r16		;initialize UART, 8bits, no parity, 1 stop, 9600
   fa:	01 b9       	out	0x01, r16	; 1
-		ldi	r17,0x0			//student comment here
+		ldi	r17,0x0			//Loads 0x0 into r17
   fc:	10 e0       	ldi	r17, 0x00	; 0
-		ldi	r16,0x67		//student comment here
+		ldi	r16,0x67		//Loads 0x67 into r16
   fe:	07 e6       	ldi	r16, 0x67	; 103
-		sts	UBRR0H,r17		//student comment here
+		sts	UBRR0H,r17		//Sets high part of Baud Rate 
  100:	10 93 c5 00 	sts	0x00C5, r17	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7e00c5>
-		sts	UBRR0L,r16		//student comment here
+		sts	UBRR0L,r16		//Sets low part of Baud Rate
  104:	00 93 c4 00 	sts	0x00C4, r16	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7e00c4>
-		ldi	r16,24			//student comment here
+		ldi	r16,24			//Loads 24 into r16
  108:	08 e1       	ldi	r16, 0x18	; 24
-		sts	UCSR0B,r16		//student comment here
+		sts	UCSR0B,r16		//Stores r24 in the the configuration register for serial communications. Enables RX complete interrupt and TX complete interrupt
  10a:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
-		ldi	r16,6			//student comment here
+		ldi	r16,6			//loads 6 into r16
  10e:	06 e0       	ldi	r16, 0x06	; 6
-		sts	UCSR0C,r16		//student comment here
+		sts	UCSR0C,r16		//sets characters size to 8-bits
  110:	00 93 c2 00 	sts	0x00C2, r16	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7e00c2>
 		ldi r16,0x87		//initialize ADC
  114:	07 e8       	ldi	r16, 0x87	; 135
-		sts	ADCSRA,r16		//student comment here
+		sts	ADCSRA,r16		//stores 0x87 into ADC configuration SRAM  location
  116:	00 93 7a 00 	sts	0x007A, r16	; 0x80007a <__TEXT_REGION_LENGTH__+0x7e007a>
-		ldi r16,0x40		//student comment here
+		ldi r16,0x40		//Loads 0x40 into r16
  11a:	00 e4       	ldi	r16, 0x40	; 64
-		sts ADMUX,r16		//student comment here
+		sts ADMUX,r16		//Stores the value of r16 into the ADC multiplexer selection memory space in SRAM
  11c:	00 93 7c 00 	sts	0x007C, r16	; 0x80007c <__TEXT_REGION_LENGTH__+0x7e007c>
-		ldi r16,0			//student comment here
+		ldi r16,0			//Loads 0 into r16
  120:	00 e0       	ldi	r16, 0x00	; 0
-		sts ADCSRB,r16		//student comment here
+		sts ADCSRB,r16		//Stores 0 into ADCSRB memory space which puts ADC in free roaming mode
  122:	00 93 7b 00 	sts	0x007B, r16	; 0x80007b <__TEXT_REGION_LENGTH__+0x7e007b>
-		ldi r16,0xFE		//student comment here
+		ldi r16,0xFE		//Loads 0xFE int r16
  126:	0e ef       	ldi	r16, 0xFE	; 254
-		sts DIDR0,r16		//student comment here
+		sts DIDR0,r16		//Stores 0xFE into DIDR0 which is the data input disable register
  128:	00 93 7e 00 	sts	0x007E, r16	; 0x80007e <__TEXT_REGION_LENGTH__+0x7e007e>
 		ldi r16,0xFF		//student comment here
  12c:	0f ef       	ldi	r16, 0xFF	; 255

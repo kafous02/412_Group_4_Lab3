@@ -56,18 +56,18 @@ Mega328P_Init:
 		ldi	r16,0x67		//Loads 0x67 into r16
 		sts	UBRR0H,r17		//Sets high part of Baud Rate 
 		sts	UBRR0L,r16		//Sets low part of Baud Rate
-		ldi	r16,24			//student comment here
-		sts	UCSR0B,r16		//student comment here
-		ldi	r16,6			//student comment here
-		sts	UCSR0C,r16		//student comment here
+		ldi	r16,24			//Loads 24 into r16
+		sts	UCSR0B,r16		//Stores r24 in the the configuration register for serial communications. Enables RX complete interrupt and TX complete interrupt
+		ldi	r16,6			//loads 6 into r16
+		sts	UCSR0C,r16		//sets characters size to 8-bits
 		ldi r16,0x87		//initialize ADC
-		sts	ADCSRA,r16		//student comment here
-		ldi r16,0x40		//student comment here
-		sts ADMUX,r16		//student comment here
-		ldi r16,0			//student comment here
-		sts ADCSRB,r16		//student comment here
-		ldi r16,0xFE		//student comment here
-		sts DIDR0,r16		//student comment here
+		sts	ADCSRA,r16		//stores 0x87 into ADC configuration SRAM  location
+		ldi r16,0x40		//Loads 0x40 into r16
+		sts ADMUX,r16		//Stores the value of r16 into the ADC multiplexer selection memory space in SRAM
+		ldi r16,0			//Loads 0 into r16
+		sts ADCSRB,r16		//Stores 0 into ADCSRB memory space which puts ADC in free roaming mode
+		ldi r16,0xFE		//Loads 0xFE int r16
+		sts DIDR0,r16		//Stores 0xFE into DIDR0 which is the data input disable register
 		ldi r16,0xFF		//student comment here
 		sts DIDR1,r16		//student comment here
 		ret					//student comment here
