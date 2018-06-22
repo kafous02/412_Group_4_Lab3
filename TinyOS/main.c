@@ -6,13 +6,19 @@
  // Copyright 2018, All Rights Reserved
  
  //no includes, no ASF, no libraries
+ #include <stdio.h>
+ #include <stdlib.h>
  
  const char MS1[] = "\r\nECE-412 ATMega328P Tiny OS";
  const char MS2[] = "\r\nby Eugene Rockey Copyright 2018, All Rights Reserved";
- const char MS3[] = "\r\nMenu: (L)CD, (A)CD, (E)EPROM\r\n";
+ const char MS3[] = "\r\nMenu: (L)CD, (A)CD, (E)EPROM, (U)SART\r\n";
  const char MS4[] = "\r\nReady: ";
  const char MS5[] = "\r\nInvalid Command Try Again...";
  const char MS6[] = "Volts\r";
+ const char MS7[] = "Please Input the Desired Baud Rate: ";
+ const char MS8[] = "Please Input the Desired Number of Data Bits: ";
+ const char MS9[] = "Please Input the Desired Parity: ";
+ const char MS10[] = "Please Input the Desired Number of Stop Bits: ";
  
  
 
@@ -28,9 +34,22 @@ void Mega328P_Init(void);
 void ADC_Get(void);
 void EEPROM_Read(void);
 void EEPROM_Write(void);
+void USART(void);
+void ChangeBaud(void);
+void Baud4800(void);
+void Baud9600(void);
+void Baud14400(void);
+void Baud19200(void);
+void Baud38400(void);
+void Baud57600(void);
+void ChangeDataBits(void);
+void ChangeParity(void);
+void ChangeStopBits(void);
 
 unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
+unsigned int UCSR0B;
+unsigned int UCSR0C;
 char HADC;						//shared ADC variable with Assembly
 char LADC;						//shared ADC variable with Assembly
 
@@ -135,6 +154,151 @@ void EEPROM(void)
 	UART_Puts("\r\n");
 }
 
+void USART(void)
+{
+	UART_Puts(MS7);
+	ChangeBaud();
+	UART_Puts(MS8);
+	ChangeDataBits();
+	UART_Puts(MS9);
+	ChangeParity();
+	UART_Puts(MS10);
+	ChangeStopBits();
+}
+
+void ChangeBaud(void)
+{
+	UART_Puts("\nWhat Baud Rate would you like?\n");
+	UART_Puts("(1)4800\n(2)9600\n(3)14400\n(4)19200\n(5)38400\n(6)57600");
+	ASCII = '\0';
+	while(ASCII == '\0')
+	{
+		UART_Get();
+	}
+	switch(ASCII)
+	{
+		case '1':
+			UART_Puts("\nBaud rate successfully changed to 4800");
+			Baud4800();
+		break;
+		case '2':
+			UART_Puts("\nBaud rate successfully changed to 9600");
+			Baud9600();
+		break;
+		case '3':
+			UART_Puts("\nBaud rate successfully changed to 14400");
+			Baud14400();
+		break;
+		case '4':
+			UART_Puts("\nBaud rate successfully changed to 19200");
+			Baud19200();
+		break;
+		case '5':
+			UART_Puts("\nBaud rate successfully changed to 38400");
+			Baud38400();
+		break;
+		case '6':
+			UART_Puts("\nBaud rate successfully changed to 57600");
+			Baud57600();
+		break;
+		default:
+		UART_Puts(MS5);
+		break;
+	}
+}
+
+void ChangeDataBits(void)
+{
+	UART_Puts("\nHow many data bits are desired? (5,6,7,8,9)");
+	ASCII = '\0';
+	while(ASCII == '\0')
+	{
+		UART_Get();
+	}
+	switch(ASCII)
+	{
+		case '5':
+			UCSR0C |= (0<<1)&&(0<<2);
+			UCSR0B |= (0<<2);
+			UART_Puts("\nNumber of data bits has been changed to 5");
+		break;
+		case '6':
+			UCSR0C |= (1<<1)&&(0<<2);
+			UCSR0B |= (0<<2);
+			UART_Puts("\nNumber of data bits has been changed to 6");
+		break;
+		case '7':
+			UCSR0C |= (0<<1)&&(1<<2);
+			UCSR0B |= (0<<2);
+			UART_Puts("\nNumber of data bits has been changed to 7");
+		break;
+		case '8':
+			UCSR0C |= (1<<1)&&(1<<2);
+			UCSR0B |= (0<<2);
+			UART_Puts("\nNumber of data bits has been changed to 8");
+		break;
+		case '9':
+			UCSR0C |= (1<<1)&&(1<<2);
+			UCSR0B |= (1<<2);
+			UART_Puts("\nNumber of data bits has been changed to 9");
+		break;
+		default:
+			UART_Puts(MS5);
+	}
+}
+
+void ChangeParity(void)
+{
+	UART_Puts("\nSelect a parity:\n(1)None\n(2)Odd\n(3)Even");
+	ASCII = '\0';
+	while(ASCII == '\0')
+	{
+		UART_Get();
+	}
+	switch(ASCII)
+	{
+		case '1':
+			UCSR0C |= (0<<5)&&(0<<4);
+			UART_Puts("\nNo parity was set");
+		break;
+		case '2':
+			UCSR0C |= (1<<5)&&(1<<4);
+			UART_Puts("\nAn odd parity was set");
+		break;
+		case '3':
+			UCSR0C |= (1<<5)&&(0<<4);
+			UART_Puts("\nAn even parity was set");
+		break;
+		default:
+			UART_Puts(MS5);
+		break;
+	}
+}
+
+void ChangeStopBits(void)
+{
+	UART_Puts("\nSelect how many stop bits are desired: 1 or 2");
+	ASCII = '\0';
+	while(ASCII == '\0')
+	{
+		UART_Get();
+	}
+	switch(ASCII)
+	{
+		case '1':
+			UCSR0C |= (1<<3);
+			UART_Puts("\nOne stop bit will be provided");
+		break;
+		case '2':
+			UCSR0C |= (0<<3);
+			UART_Puts("\nTwo stop bits will be provided");
+		break;
+		default:
+			UART_Puts(MS5);
+		break;
+	}
+}
+
 
 void Command(void)					//command interpreter
 {
@@ -152,6 +316,7 @@ void Command(void)					//command interpreter
 		break;
 		case 'E' | 'e': EEPROM();
 		break;
+		case 'U' | 'u': USART();
 		default:
 		UART_Puts(MS5);
 		HELP();

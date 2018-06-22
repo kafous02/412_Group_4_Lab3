@@ -205,7 +205,54 @@ EEPROM_Read:
 		in      r16,EEDR		; Read data from Data Register
 		sts		ASCII,r16  
 		ret
-
+.global	Baud4800
+Baud4800:
+		out		U2X0, r16
+		ldi		r17, 0
+		ldi		r16, 0xCF		;Value chosen based on ATmega328pb data sheet
+		sts		UBRR0H, r17
+		sts		UBRR0L, r16
+		ret
+.global Baud9600
+Baud9600:
+		out		U2X0, r16
+		ldi		r17, 0
+		ldi		r16, 0x67
+		sts		UBRR0H, r17
+		sts		UBRR0L, r16
+		ret
+.global	Baud14400
+Baud14400:
+		out		U2X0, r16
+		ldi		r17, 0
+		ldi		r16, 0x44
+		sts		UBRR0H, r17
+		sts		UBRR0L, r16
+		ret
+.global	Baud19200
+Baud19200:
+		out		U2X0, r16
+		ldi		r17, 0
+		ldi		r16, 0x44
+		sts		UBRR0H, r17
+		sts		UBRR0L, r16
+		ret
+.global Baud38400
+Baud38400:
+		out		U2X0, r16
+		ldi		r17, 0
+		ldi		r16, 0x19
+		sts		UBRR0H, r17
+		sts		UBRR0L, r16
+		ret
+.global	Baud57600
+Baud57600:
+		out		U2X0, r16
+		ldi		r17, 0
+		ldi		r16, 0x10
+		sts		UBRR0H, r17
+		sts		UBRR0L, r16
+		ret
 
 		.end
 
