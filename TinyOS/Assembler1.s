@@ -68,115 +68,115 @@ Mega328P_Init:
 		sts ADCSRB,r16		//Stores 0 into ADCSRB memory space which puts ADC in free roaming mode
 		ldi r16,0xFE		//Loads 0xFE int r16
 		sts DIDR0,r16		//Stores 0xFE into DIDR0 which is the data input disable register
-		ldi r16,0xFF		//student comment here
-		sts DIDR1,r16		//student comment here
-		ret					//student comment here
+		ldi r16,0xFF		//Loads 0xFF int r16
+		sts DIDR1,r16		//Stores 0xFF into DIDR0 which is the data input disable register
+		ret					//Return from Mega328P_Init - I/O port and ADC configurations have been set
 	
 .global LCD_Write_Command
 LCD_Write_Command:
-	call	UART_Off		//student comment here
+	call	UART_Off		//Call subroutine UART_off to temporarily turn UART off
 	ldi		r16,0xFF		;PD0 - PD7 as outputs
-	out		DDRD,r16		//student comment here
-	lds		r16,DATA		//student comment here
-	out		PORTD,r16		//student comment here
-	ldi		r16,4			//student comment here
-	out		PORTB,r16		//student comment here
-	call	LCD_Delay		//student comment here
-	ldi		r16,0			//student comment here
-	out		PORTB,r16		//student comment here
-	call	LCD_Delay		//student comment here
-	call	UART_On			//student comment here
-	ret						//student comment here
+	out		DDRD,r16		//Set Data Direction Register D
+	lds		r16,DATA		//Load contents of Label Data into r16
+	out		PORTD,r16		//Move contents of Label Data into Port D
+	ldi		r16,4			//Load constant 4 into r16
+	out		PORTB,r16		//Move 4 from r16 into Port B
+	call	LCD_Delay		//Call subroutine LCD_Delay to do nothing for a constant amount of clock cycles
+	ldi		r16,0			//Clear r16
+	out		PORTB,r16		//Clear PortB
+	call	LCD_Delay		//Call subroutine LCD_Delay to do nothing for a constant amount of clock cycles
+	call	UART_On			//Call subroutine UART_On to turn UART back on
+	ret						//End of LCD_Write_Command
 
 LCD_Delay:
-	ldi		r16,0xFA		//student comment here
-D0:	ldi		r17,0xFF		//student comment here
-D1:	dec		r17				//student comment here
-	brne	D1				//student comment here
-	dec		r16				//student comment here
-	brne	D0				//student comment here
-	ret						//student comment here
+	ldi		r16,0xFA		//Load constant 250 into r16
+D0:	ldi		r17,0xFF		//Load constant 255 into r17
+D1:	dec		r17				//Decrement r17
+	brne	D1				//Branch back to D1 while it's still not 0.
+	dec		r16				//Decrement r16
+	brne	D0				//Branch back to D0 while it's still not 0.
+	ret						//End of LCD_Delay
 
 .global LCD_Write_Data
 LCD_Write_Data:
-	call	UART_Off		//student comment here
-	ldi		r16,0xFF		//student comment here
-	out		DDRD,r16		//student comment here
-	lds		r16,DATA		//student comment here
-	out		PORTD,r16		//student comment here
-	ldi		r16,6			//student comment here
-	out		PORTB,r16		//student comment here
-	call	LCD_Delay		//student comment here
-	ldi		r16,0			//student comment here
-	out		PORTB,r16		//student comment here
-	call	LCD_Delay		//student comment here
-	call	UART_On			//student comment here
-	ret						//student comment here
+	call	UART_Off		//Call subroutine UART_off to temporarily turn UART off
+	ldi		r16,0xFF		//Set r16
+	out		DDRD,r16		//Set Data Direction Register D
+	lds		r16,DATA		//Load contents of Label Data into r16
+	out		PORTD,r16		//Move contents of Label Data into Port D
+	ldi		r16,6			//Load constant 6 into r16
+	out		PORTB,r16		//Move 6 from r16 into Port B
+	call	LCD_Delay		//Call subroutine LCD_Delay to do nothing for a constant amount of clock cycles
+	ldi		r16,0			//Clear r16
+	out		PORTB,r16		//Clear PortB
+	call	LCD_Delay		//Call subroutine LCD_Delay to do nothing for a constant amount of clock cycles
+	call	UART_On			//Call subroutine UART_On to turn UART back on
+	ret						//End of UART_Write_Data
 
 .global LCD_Read_Data
 LCD_Read_Data:
-	call	UART_Off		//student comment here
-	ldi		r16,0x00		//student comment here
-	out		DDRD,r16		//student comment here
-	out		PORTB,4			//student comment here
-	in		r16,PORTD		//student comment here
-	sts		DATA,r16		//student comment here
-	out		PORTB,0			//student comment here
-	call	UART_On			//student comment here
-	ret						//student comment here
+	call	UART_Off		//Call subroutine UART_off to temporarily turn UART off
+	ldi		r16,0x00		//Clear r16
+	out		DDRD,r16		//Clear Data Direction Register D
+	out		PORTB,4			//Load constant 4 into Port B 
+	in		r16,PORTD		//Read contents of Port D Data Register into r16
+	sts		DATA,r16		//Store the contents of Port D Data Register into label Data
+	out		PORTB,0			//clear Port B
+	call	UART_On			//Call subroutine UART_On to turn UART back on
+	ret						//End of LCD_Read_Data
 
 .global UART_On
 UART_On:
-	ldi		r16,2				//student comment here
-	out		DDRD,r16			//student comment here
-	ldi		r16,24				//student comment here
-	sts		UCSR0B,r16			//student comment here
-	ret							//student comment here
+	ldi		r16,2				//Load constant 2 into r16
+	out		DDRD,r16			//Store 2 into Data Direction Register Port D
+	ldi		r16,24				//Load constant 24 into r16
+	sts		UCSR0B,r16			//Store 24 into USART Control and Status Register 0 B
+	ret							//End of UART_On
 
 .global UART_Off
 UART_Off:
-	ldi	r16,0					//student comment here
-	sts UCSR0B,r16				//student comment here
-	ret							//student comment here
+	ldi	r16,0					//Load constant 0 into r16
+	sts UCSR0B,r16				//Move 0 from r16 into USART Control and Status Register 0 B
+	ret							//End of UART_Off
 
 .global UART_Clear
 UART_Clear:
-	lds		r16,UCSR0A			//student comment here
-	sbrs	r16,RXC0			//student comment here
-	ret							//student comment here
-	lds		r16,UDR0			//student comment here
-	rjmp	UART_Clear			//student comment here
+	lds		r16,UCSR0A			//Store the contents of USART Control and Status Register 0 A into r16
+	sbrs	r16,RXC0			//Skips the next line if USART Receive Complete is set
+	ret							//End of UART_Clear
+	lds		r16,UDR0			//Store the contents of USART I/O Data Register 0 into r16
+	rjmp	UART_Clear			//Loop back to start while RXC0 = 1
 
 .global UART_Get
 UART_Get:
-	lds		r16,UCSR0A			//student comment here
-	sbrs	r16,RXC0			//student comment here
-	rjmp	UART_Get			//student comment here
-	lds		r16,UDR0			//student comment here
-	sts		ASCII,r16			//student comment here
-	ret							//student comment here
+	lds		r16,UCSR0A			//Store the contents of USART Control and Status Register 0 A into r16
+	sbrs	r16,RXC0			//Skips the next line if USART Receive Complete is set
+	rjmp	UART_Get			//Loop back to start while RXC0 = 1
+	lds		r16,UDR0			//Store the contents of USART I/O Data Register 0 into r16
+	sts		ASCII,r16			//Move the contents of USART I/O Data Register 0 from r16 into label ASCII
+	ret							//End of UART_Get
 
 .global UART_Put
 UART_Put:
-	lds		r17,UCSR0A			//student comment here
-	sbrs	r17,UDRE0			//student comment here
-	rjmp	UART_Put			//student comment here
-	lds		r16,ASCII			//student comment here
-	sts		UDR0,r16			//student comment here
-	ret							//student comment here
+	lds		r17,UCSR0A			//Store the contents of USART Control and Status Register 0 A into r17
+	sbrs	r17,UDRE0			//Skips the next instruction if USART Data Register Empty is set
+	rjmp	UART_Put			//Loop back to start while UDRE0 = 1
+	lds		r16,ASCII			//Load Label ASCII into r16
+	sts		UDR0,r16			//Move ASCII from r16 to USART Data Register
+	ret							//End of UART_Put
 
 .global ADC_Get
 ADC_Get:
-		ldi		r16,0xC7			//student comment here
-		sts		ADCSRA,r16			//student comment here
-A2V1:	lds		r16,ADCSRA			//student comment here
-		sbrc	r16,ADSC			//student comment here
-		rjmp 	A2V1				//student comment here
-		lds		r16,ADCL			//student comment here
-		sts		LADC,r16			//student comment here
-		lds		r16,ADCH			//student comment here
-		sts		HADC,r16			//student comment here
-		ret							//student comment here
+		ldi		r16,0xC7			//Load 199 into r16
+		sts		ADCSRA,r16			//Move 199 from r16 to ADC Control and Status Register A
+A2V1:	lds		r16,ADCSRA			//Load the ADC Control and Status Register A into r16
+		sbrc	r16,ADSC			//Skip the following instruction if the ADC Start Conversion bit is cleared
+		rjmp 	A2V1				//Loop back into A2V1, continually scanning for ADCSRA to be 1
+		lds		r16,ADCL			//ADCL must be read first, then ADCH, to ensure that the content of the Data Registers belongsto the same conversion
+		sts		LADC,r16			//Store ADCL into SRAM Label LADC
+		lds		r16,ADCH			//The rest of ADC is read
+		sts		HADC,r16			//Store ADCH into SRAM Label HADC
+		ret							//End of ADC_Get
 
 .global EEPROM_Write
 EEPROM_Write:      
