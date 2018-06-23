@@ -78,7 +78,7 @@ LCD_Write_Command:
 	ldi		r16,0xFF		;PD0 - PD7 as outputs
 	out		DDRD,r16		//Set Data Direction Register D
 	lds		r16,DATA		//Load contents of Label Data into r16
-	out		PORTD,r16		//Move contents of Label Data into Port D
+	out		PORTD,r16		//Move contents of Label Data into Port D from r16
 	ldi		r16,4			//Load constant 4 into r16
 	out		PORTB,r16		//Move 4 from r16 into Port B
 	call	LCD_Delay		//Call subroutine LCD_Delay to do nothing for a constant amount of clock cycles
