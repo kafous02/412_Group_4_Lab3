@@ -45,6 +45,8 @@ void Baud57600(void);
 void ChangeDataBits(void);
 void ChangeParity(void);
 void ChangeStopBits(void);
+void WriteEEPROM(void);
+void ReadEEPROM(void);
 
 unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
@@ -52,6 +54,9 @@ unsigned int UCSR0B;
 unsigned int UCSR0C;
 char HADC;						//shared ADC variable with Assembly
 char LADC;						//shared ADC variable with Assembly
+char addressH;
+char addressL;
+char eepromData;
 
 char volts[5];					//string buffer for ADC output
 int Acc;						//Accumulator for ADC use
@@ -138,7 +143,25 @@ void ADC(void)						//Lite Demo of the Analog to Digital Converter
 
 void EEPROM(void)
 {
-	UART_Puts("\r\nEEPROM Write and Read.");
+	UART_Puts("\r\n(R)ead or (W)rite");
+	ASCII = '\0';
+	while(ASCII == '\0')
+	{
+		UART_Get();
+	}
+	switch(ASCII)
+	{
+		case 'R' | 'r':
+			ReadEEPROM();
+		break;
+		case 'W' | 'w':
+			WriteEEPROM();
+		break;
+		default:
+			UART_Puts(MS5);
+		break;
+	}
+			
 	/*
 	Re-engineer this subroutine so that a byte of data can be written to any address in EEPROM
 	during run-time via the command line and the same byte of data can be read back and verified after the power to
@@ -146,12 +169,58 @@ void EEPROM(void)
 	8-bit data value. Utilize the following two given Assembly based drivers to communicate with the EEPROM. You
 	may modify the EEPROM drivers as needed. User must be able to always return to command line.
 	*/
-	UART_Puts("\r\n");
+	/*UART_Puts("\r\n");
 	EEPROM_Write();
 	UART_Puts("\r\n");
 	EEPROM_Read();
 	UART_Put();
-	UART_Puts("\r\n");
+	UART_Puts("\r\n"); */
+}
+
+void ReadEEPROM(void)
+{
+	UART_Puts("\nEnter the upper bit of a valid EEPROM address to read from: ");
+	ASCII = '\0';
+	while(ASCII == '\0')
+	{
+		UART_Get();
+	}
+	addressH = ASCII;
+	UART_Puts("\nEnter the lower bit of a valid EEPROM address to read from: ");
+	ASCII = '\0';
+	while(ASCII == '\0')
+	{
+		UART_Get();
+	}
+	addressL = ASCII;
+	EEPROM_Read();
+}
+
+void WriteEEPROM(void)
+{
+	UART_Puts("\nEnter the upper bit of a valid EEPROM address to write to: ");
+	ASCII = '\0';
+	while(ASCII == '\0')
+	{
+		UART_Get();
+	}
+	addressH = ASCII;
+	UART_Puts("\nEnter the lower bit of a valid EEPROM address to write to: ");
+	ASCII = '\0';
+	while(ASCII == '\0')
+	{
+		UART_Get();
+	}
+	addressL = ASCII;
+	UART_Puts("\nEnter the data to be stored: ");
+	ASCII = '\0';
+	while(ASCII == '\0')
+	{
+		UART_Get();
+	}
+	eepromData = ASCII;
+	EEPROM_Write();
+	UART_Puts("\nThe data has been successfully written to the desired EEPROM address");
 }
 
 void USART(void)
@@ -333,3 +402,4 @@ int main(void)
 		Command();				//infinite command loop
 	}
 }
+
