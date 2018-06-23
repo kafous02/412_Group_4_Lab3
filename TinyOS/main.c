@@ -155,7 +155,9 @@ void Command(void)					//command interpreter
 		default:
 		UART_Puts(MS5);
 		HELP();
-		break;  			//Add a 'USART' command and subroutine to allow the user to reconfigure the 						//serial port parameters during runtime. Modify baud rate, # of data bits, parity, 							//# of stop bits.
+		break;  			//Add a 'USART' command and subroutine to allow the user to reconfigure the 						
+							//serial port parameters during runtime. Modify baud rate, # of data bits, parity, 							
+							//# of stop bits.
 	}
 }
 
