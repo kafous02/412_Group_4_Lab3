@@ -64,7 +64,7 @@ Mega328P_Init:
 		sts	ADCSRA,r16		//stores 0x87 into ADC configuration SRAM  location
 		ldi r16,0x40		//Loads 0x40 into r16
 		sts ADMUX,r16		//Stores the value of r16 into the ADC multiplexer selection memory space in SRAM
-		ldi r16,0			//Loads 0 into r16
+		ldi r16,7			//Loads 0 into r16
 		sts ADCSRB,r16		//Stores 0 into ADCSRB memory space which puts ADC in free roaming mode
 		ldi r16,0xFE		//Loads 0xFE int r16
 		sts DIDR0,r16		//Stores 0xFE into DIDR0 which is the data input disable register
@@ -156,6 +156,12 @@ UART_Get:
 	sts		ASCII,r16			//Move the contents of USART I/O Data Register 0 from r16 into label ASCII
 	ret							//End of UART_Get
 
+.global UART_Poll
+UART_Poll:
+	lds		r16,UDR0			//Store the contents of USART I/O Data Register 0 into r16
+	sts		ASCII,r16			//Move the contents of USART I/O Data Register 0 from r16 into label ASCII
+	ret							//End of UART_Get
+
 .global UART_Put
 UART_Put:
 	lds		r17,UCSR0A			//Store the contents of USART Control and Status Register 0 A into r17
@@ -167,8 +173,8 @@ UART_Put:
 
 .global ADC_Get
 ADC_Get:
-		ldi		r16,0xC7			//Load 199 into r16
-		sts		ADCSRA,r16			//Move 199 from r16 to ADC Control and Status Register A
+		ldi		r16,0xE7			//Load 231 into r16
+		sts		ADCSRA,r16			//Move 231 from r16 to ADC Control and Status Register A
 A2V1:	lds		r16,ADCSRA			//Load the ADC Control and Status Register A into r16
 		sbrc	r16,ADSC			//Skip the following instruction if the ADC Start Conversion bit is cleared
 		rjmp 	A2V1				//Loop back into A2V1, continually scanning for ADCSRA to be 1
@@ -176,8 +182,10 @@ A2V1:	lds		r16,ADCSRA			//Load the ADC Control and Status Register A into r16
 		sts		LADC,r16			//Store ADCL into SRAM Label LADC
 		lds		r16,ADCH			//The rest of ADC is read
 		sts		HADC,r16			//Store ADCH into SRAM Label HADC
-		ret							//End of ADC_Get
+		ret							//End of ADC_Get				
 
+
+					
 .global EEPROM_Write
 EEPROM_Write:      
 		sbic    EECR,EEPE

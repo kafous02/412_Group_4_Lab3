@@ -4,15 +4,16 @@
  // Created: 1/30/2018 4:04:52 AM
  // Author : Eugene Rockey
  // Copyright 2018, All Rights Reserved
- 
- //no includes, no ASF, no libraries
+    
+#include <math.h>   
+#include <string.h>  
  
  const char MS1[] = "\r\nECE-412 ATMega328P Tiny OS";
  const char MS2[] = "\r\nby Eugene Rockey Copyright 2018, All Rights Reserved";
  const char MS3[] = "\r\nMenu: (L)CD, (A)CD, (E)EPROM\r\n";
  const char MS4[] = "\r\nReady: ";
  const char MS5[] = "\r\nInvalid Command Try Again...";
- const char MS6[] = "Volts\r";
+ const char MS6[] = " Fahrenheit\r";
  
  
 
@@ -26,16 +27,23 @@ void LCD_Write_Command(void);
 void LCD_Read_Data(void);
 void Mega328P_Init(void);
 void ADC_Get(void);
+void ADC_Poll(void);
 void EEPROM_Read(void);
 void EEPROM_Write(void);
+void UART_Poll(void);
+
 
 unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
 char HADC;						//shared ADC variable with Assembly
 char LADC;						//shared ADC variable with Assembly
 
-char volts[5];					//string buffer for ADC output
+char lastTemperature[5] = "     ";
+char temperature[5];					//string buffer for ADC output
 int Acc;						//Accumulator for ADC use
+int isADC;
+
+
 
 void UART_Puts(const char *str)	//Display a string in the PC Terminal Program
 {
@@ -91,23 +99,69 @@ void LCD(void)						//Lite LCD demo
 
 void ADC(void)						//Lite Demo of the Analog to Digital Converter
 {
-	volts[0x1]='.';
-	volts[0x3]=' ';
-	volts[0x4]= 0;
-	ADC_Get();
-	Acc = (((int)HADC) * 0x100 + (int)(LADC))*0xA;
-	volts[0x0] = 48 + (Acc / 0x7FE);
-	Acc = Acc % 0x7FE;
-	volts[0x2] = ((Acc *0xA) / 0x7FE) + 48;
-	Acc = (Acc * 0xA) % 0x7FE;
-	if (Acc >= 0x3FF) volts[0x2]++;
-	if (volts[0x2] == 58)
-	{
-		volts[0x2] = 48;
-		volts[0x0]++;
-	}
-	UART_Puts(volts);
-	UART_Puts(MS6);
+	//int stayInLoop = 1;
+
+	//while(stayInLoop){
+		
+		//Mega328P_Init();
+		isADC = 1;
+		
+		ADC_Get();		
+		
+		double celsius = 0;
+		double kelvin = 0;
+		int fahrenheit = 0;
+		
+		
+		Acc = (((int)HADC) * 0x100 + (int)(LADC));
+		
+			
+		double r = (10000.0 * ((double)Acc))/(1024.0 - ((double)Acc));
+		const double t0 = 295.37;
+		const double B = 3950.0;
+		double r0 = ((double)10000 * (double)512)/((double)1024 - (double)512);
+		r = r/r0;
+	
+		kelvin = (B * t0)/(t0 * log(r) + B);
+
+		celsius = kelvin - 273.15;
+	
+		fahrenheit = floor(celsius*(9.0/5.0) + 32.0);
+	
+		char f0 = (fahrenheit/100) + '0';
+		fahrenheit = fahrenheit % 100;
+		char f1 = (fahrenheit/10) + '0';
+		fahrenheit = fahrenheit % 10;
+		char f2 = fahrenheit + '0';
+
+		if(f0 == '0'){
+			f0 = ' ';
+		}
+	
+		temperature[0] = f0;
+		temperature[1] = f1;
+		temperature[2] = f2;
+		temperature[3] = 167;
+		temperature[4] = 0;
+	
+		if(strcmp(lastTemperature, temperature) != 0){
+	
+		UART_Puts(temperature);
+		UART_Puts(" F\n\r");
+		
+		strcpy(lastTemperature, temperature);
+		}
+		
+		//UART_Get();
+		UART_Poll();
+		if(ASCII == 'x'){
+			//stayInLoop = 0;
+			//break;
+			isADC = 0;
+		}
+
+	//}
+
 	/*
 		Re-engineer this subroutine to display temperature in degrees Fahrenheit on the Terminal.
 		The potentiometer simulates a thermistor, its varying resistance simulates the
@@ -116,6 +170,9 @@ void ADC(void)						//Lite Demo of the Analog to Digital Converter
 	*/
 	
 }
+
+
+
 
 void EEPROM(void)
 {
@@ -138,11 +195,16 @@ void EEPROM(void)
 
 void Command(void)					//command interpreter
 {
-	UART_Puts(MS3);
+	if(!isADC){
+	UART_Puts(MS3);	
 	ASCII = '\0';						
 	while (ASCII == '\0')
 	{
 		UART_Get();
+	}
+	}
+	else {
+		ASCII = 'a';
 	}
 	switch (ASCII)
 	{
@@ -151,6 +213,8 @@ void Command(void)					//command interpreter
 		case 'A' | 'a': ADC();
 		break;
 		case 'E' | 'e': EEPROM();
+		break;
+		case 'X' | 'x':
 		break;
 		default:
 		UART_Puts(MS5);
@@ -165,6 +229,7 @@ int main(void)
 {
 	Mega328P_Init();
 	Banner();
+	isADC =  0;
 	while (1)
 	{
 		Command();				//infinite command loop
