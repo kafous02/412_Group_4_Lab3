@@ -31,7 +31,9 @@ void ADC_Poll(void);
 void EEPROM_Read(void);
 void EEPROM_Write(void);
 void UART_Poll(void);
-
+void substring(char*, char*, int);
+void scrollingLCD(char*);
+void LCD_Delay(void);
 
 unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
@@ -88,7 +90,12 @@ void LCD(void)						//Lite LCD demo
 	LCD_Write_Command();
 	DATA = 0x0f;					//Student Comment Here
 	LCD_Write_Command();
-	LCD_Puts("Hello ECE412!");
+	
+	char message[50] = "Group 4 is the best group in the world. ";
+	
+	scrollingLCD(message);
+		
+	
 	/*
 	Re-engineer this subroutine to have the LCD endlessly scroll a marquee sign of 
 	your Team's name either vertically or horizontally. Any key press should stop
@@ -96,6 +103,56 @@ void LCD(void)						//Lite LCD demo
 	always be able to return to command line.
 	*/
 }
+
+
+void scrollingLCD(char * message) {
+	
+	int exitScroll = 1;
+	int incrementer = 0;	
+
+	int sizeOfOrigin = strlen(message);
+	
+	while(exitScroll) {
+		
+		char destination[17] = "                ";
+		
+		int input = incrementer % sizeOfOrigin;
+		substring(message, destination, input);
+		
+		LCD_Puts(destination);
+		
+		for(int iter = 0; iter < 5000; iter++){}
+			
+		UART_Poll();
+		if(incrementer == 25){
+			exitScroll = 0;
+			break;
+		}	
+		
+		incrementer++;
+	}
+	
+}
+
+
+void substring(char *origin, char *destination, int arStart){
+	
+	int sizeOfOrigin = strlen(origin);
+	int sizeOfDestination = strlen(destination);
+	int destinationIndex = 0;
+	
+	for(int i=arStart;i<(sizeOfDestination + arStart);i++){
+		int originIndex = 0;
+		originIndex  = (i % sizeOfOrigin);
+		
+		destination[destinationIndex]=origin[originIndex];
+		destinationIndex++;
+	}
+	
+	destination[sizeOfDestination]='\0';
+	return;
+}
+
 
 void ADC(void)						//Lite Demo of the Analog to Digital Converter
 {
@@ -147,7 +204,7 @@ void ADC(void)						//Lite Demo of the Analog to Digital Converter
 		if(strcmp(lastTemperature, temperature) != 0){
 	
 		UART_Puts(temperature);
-		UART_Puts(" F\n\r");
+		UART_Puts(" F\r");
 		
 		strcpy(lastTemperature, temperature);
 		}

@@ -88,6 +88,7 @@ LCD_Write_Command:
 	call	UART_On			//Call subroutine UART_On to turn UART back on
 	ret						//End of LCD_Write_Command
 
+.global LCD_Delay
 LCD_Delay:
 	ldi		r16,0xFA		//Load constant 250 into r16
 D0:	ldi		r17,0xFF		//Load constant 255 into r17
