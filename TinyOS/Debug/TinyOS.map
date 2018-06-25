@@ -237,7 +237,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x7a0
+.text           0x00000000      0x798
  *(.vectors)
  .vectors       0x00000000       0xb4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
                 0x00000000                __vector_default
@@ -341,7 +341,7 @@ END GROUP
                 0x000000ee                __vector_18
                 0x000000ee                __vector_20
                 0x000000ee                __vector_42
- .text          0x000000f2      0x1ae Assembler1.o
+ .text          0x000000f2      0x196 Assembler1.o
                 0x000000f2                Mega328P_Init
                 0x00000134                LCD_Write_Command
                 0x00000166                LCD_Write_Data
@@ -355,65 +355,65 @@ END GROUP
                 0x00000208                EEPROM_Write
                 0x00000224                EEPROM_Read
                 0x00000240                Baud4800
-                0x00000250                Baud9600
-                0x00000260                Baud14400
-                0x00000270                Baud19200
-                0x00000280                Baud38400
-                0x00000290                Baud57600
-                0x000002a0                . = ALIGN (0x2)
+                0x00000242                Baud9600
+                0x00000250                Baud14400
+                0x0000025e                Baud19200
+                0x0000026c                Baud38400
+                0x0000027a                Baud57600
+                0x00000288                . = ALIGN (0x2)
  *(.text.*)
  .text.UART_Puts
-                0x000002a0       0x22 main.o
-                0x000002a0                UART_Puts
+                0x00000288       0x22 main.o
+                0x00000288                UART_Puts
  .text.LCD_Puts
-                0x000002c2       0x22 main.o
-                0x000002c2                LCD_Puts
- .text.Banner   0x000002e4       0x1a main.o
-                0x000002e4                Banner
- .text.HELP     0x000002fe        0xa main.o
-                0x000002fe                HELP
- .text.LCD      0x00000308       0x3c main.o
-                0x00000308                LCD
- .text.ADC      0x00000344       0xb0 main.o
-                0x00000344                ADC
+                0x000002aa       0x22 main.o
+                0x000002aa                LCD_Puts
+ .text.Banner   0x000002cc       0x1a main.o
+                0x000002cc                Banner
+ .text.HELP     0x000002e6        0xa main.o
+                0x000002e6                HELP
+ .text.LCD      0x000002f0       0x3c main.o
+                0x000002f0                LCD
+ .text.ADC      0x0000032c       0xb0 main.o
+                0x0000032c                ADC
  .text.ReadEEPROM
-                0x000003f4       0x3e main.o
-                0x000003f4                ReadEEPROM
+                0x000003dc       0x3e main.o
+                0x000003dc                ReadEEPROM
  .text.WriteEEPROM
-                0x00000432       0x62 main.o
-                0x00000432                WriteEEPROM
- .text.EEPROM   0x00000494       0x38 main.o
-                0x00000494                EEPROM
+                0x0000041a       0x62 main.o
+                0x0000041a                WriteEEPROM
+ .text.EEPROM   0x0000047c       0x38 main.o
+                0x0000047c                EEPROM
  .text.ChangeBaud
-                0x000004cc       0x9a main.o
-                0x000004cc                ChangeBaud
+                0x000004b4       0x9e main.o
+                0x000004b4                ChangeBaud
  .text.ChangeDataBits
-                0x00000566       0xa4 main.o
-                0x00000566                ChangeDataBits
+                0x00000552       0xa8 main.o
+                0x00000552                ChangeDataBits
  .text.ChangeParity
-                0x0000060a       0x5e main.o
-                0x0000060a                ChangeParity
+                0x000005fa       0x62 main.o
+                0x000005fa                ChangeParity
  .text.ChangeStopBits
-                0x00000668       0x52 main.o
-                0x00000668                ChangeStopBits
- .text.USART    0x000006ba       0x32 main.o
-                0x000006ba                USART
- .text.Command  0x000006ec       0x52 main.o
-                0x000006ec                Command
- .text.main     0x0000073e        0xe main.o
-                0x0000073e                main
+                0x0000065c       0x56 main.o
+                0x0000065c                ChangeStopBits
+ .text.USART    0x000006b2       0x32 main.o
+                0x000006b2                USART
+ .text.Command  0x000006e4       0x52 main.o
+                0x000006e4                Command
+ .text.main     0x00000736        0xe main.o
+                0x00000736                main
  .text.libgcc.div
-                0x0000074c       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodhi4.o)
-                0x0000074c                _div
-                0x0000074c                __divmodhi4
+                0x00000744       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodhi4.o)
+                0x00000744                _div
+                0x00000744                __divmodhi4
  .text.libgcc.div
-                0x00000774       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodhi4.o)
-                0x00000774                __udivmodhi4
-                0x0000079c                . = ALIGN (0x2)
+                0x0000076c       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodhi4.o)
+                0x0000076c                __udivmodhi4
+                0x00000794                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000079c        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x0000079c                _exit
-                0x0000079c                exit
+ .fini9         0x00000794        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00000794                _exit
+                0x00000794                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -432,11 +432,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000079c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000794        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000007a0                _etext = .
+                0x00000798                _etext = .
 
-.data           0x00800100      0x5f6 load address 0x000007a0
+.data           0x00800100      0x620 load address 0x00000798
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -444,58 +444,58 @@ END GROUP
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800100      0x4a3 main.o
- .rodata.MS10   0x008005a3       0x2f main.o
-                0x008005a3                MS10
- .rodata.MS9    0x008005d2       0x22 main.o
-                0x008005d2                MS9
- .rodata.MS8    0x008005f4       0x2f main.o
-                0x008005f4                MS8
- .rodata.MS7    0x00800623       0x25 main.o
-                0x00800623                MS7
- .rodata.MS6    0x00800648        0x7 main.o
-                0x00800648                MS6
- .rodata.MS5    0x0080064f       0x1f main.o
-                0x0080064f                MS5
- .rodata.MS4    0x0080066e        0xa main.o
-                0x0080066e                MS4
- .rodata.MS3    0x00800678       0x2a main.o
-                0x00800678                MS3
- .rodata.MS2    0x008006a2       0x37 main.o
-                0x008006a2                MS2
- .rodata.MS1    0x008006d9       0x1d main.o
-                0x008006d9                MS1
+                0x00800100      0x4c7 main.o
+ .rodata.MS10   0x008005c7       0x31 main.o
+                0x008005c7                MS10
+ .rodata.MS9    0x008005f8       0x24 main.o
+                0x008005f8                MS9
+ .rodata.MS8    0x0080061c       0x31 main.o
+                0x0080061c                MS8
+ .rodata.MS7    0x0080064d       0x25 main.o
+                0x0080064d                MS7
+ .rodata.MS6    0x00800672        0x7 main.o
+                0x00800672                MS6
+ .rodata.MS5    0x00800679       0x1f main.o
+                0x00800679                MS5
+ .rodata.MS4    0x00800698        0xa main.o
+                0x00800698                MS4
+ .rodata.MS3    0x008006a2       0x2a main.o
+                0x008006a2                MS3
+ .rodata.MS2    0x008006cc       0x37 main.o
+                0x008006cc                MS2
+ .rodata.MS1    0x00800703       0x1d main.o
+                0x00800703                MS1
  *(.gnu.linkonce.r*)
-                0x008006f6                . = ALIGN (0x2)
-                0x008006f6                _edata = .
-                0x008006f6                PROVIDE (__data_end, .)
+                0x00800720                . = ALIGN (0x2)
+                0x00800720                _edata = .
+                0x00800720                PROVIDE (__data_end, .)
 
-.bss            0x008006f6       0x12
-                0x008006f6                PROVIDE (__bss_start, .)
+.bss            0x00800720       0x12
+                0x00800720                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  *(COMMON)
- COMMON         0x008006f6       0x12 main.o
-                0x008006f6                DATA
-                0x008006f7                HADC
-                0x008006f8                addressL
-                0x008006f9                ASCII
-                0x008006fa                eepromData
-                0x008006fb                UCSR0C
-                0x008006fd                volts
-                0x00800702                LADC
-                0x00800703                addressH
-                0x00800704                Acc
-                0x00800706                UCSR0B
-                0x00800708                PROVIDE (__bss_end, .)
-                0x000007a0                __data_load_start = LOADADDR (.data)
-                0x00000d96                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800720       0x12 main.o
+                0x00800720                DATA
+                0x00800721                HADC
+                0x00800722                addressL
+                0x00800723                ASCII
+                0x00800724                eepromData
+                0x00800725                UCSR0C
+                0x00800727                volts
+                0x0080072c                LADC
+                0x0080072d                addressH
+                0x0080072e                Acc
+                0x00800730                UCSR0B
+                0x00800732                PROVIDE (__bss_end, .)
+                0x00000798                __data_load_start = LOADADDR (.data)
+                0x00000db8                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800708        0x0
+.noinit         0x00800732        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800708                _end = .
+                0x00800732                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -570,11 +570,11 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x14fa
+.debug_info     0x00000000     0x152e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x8ea C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
  .debug_info    0x000008ea       0x6d Assembler1.o
- .debug_info    0x00000957      0xba3 main.o
+ .debug_info    0x00000957      0xbd7 main.o
 
 .debug_abbrev   0x00000000      0x9e3
  *(.debug_abbrev)
@@ -582,11 +582,11 @@ END GROUP
  .debug_abbrev  0x0000086e       0x14 Assembler1.o
  .debug_abbrev  0x00000882      0x161 main.o
 
-.debug_line     0x00000000      0xae3
+.debug_line     0x00000000      0xabf
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x1a5 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
- .debug_line    0x000001a5      0x3f3 Assembler1.o
- .debug_line    0x00000598      0x54b main.o
+ .debug_line    0x000001a5      0x3b7 Assembler1.o
+ .debug_line    0x0000055c      0x563 main.o
 
 .debug_frame    0x00000000      0x138
  *(.debug_frame)

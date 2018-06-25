@@ -16,9 +16,9 @@
  const char MS5[] = "\r\nInvalid Command Try Again...";
  const char MS6[] = "Volts\r";
  const char MS7[] = "Please Input the Desired Baud Rate: ";
- const char MS8[] = "Please Input the Desired Number of Data Bits: ";
- const char MS9[] = "Please Input the Desired Parity: ";
- const char MS10[] = "Please Input the Desired Number of Stop Bits: ";
+ const char MS8[] = "\r\nPlease Input the Desired Number of Data Bits: ";
+ const char MS9[] = "\r\nPlease Input the Desired Parity: ";
+ const char MS10[] = "\r\nPlease Input the Desired Number of Stop Bits: ";
  
  
 
@@ -179,14 +179,14 @@ void EEPROM(void)
 
 void ReadEEPROM(void)
 {
-	UART_Puts("\nEnter the upper bit of a valid EEPROM address to read from: ");
+	UART_Puts("\r\nEnter the upper bit of a valid EEPROM address to read from: ");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
 		UART_Get();
 	}
 	addressH = ASCII;
-	UART_Puts("\nEnter the lower bit of a valid EEPROM address to read from: ");
+	UART_Puts("\r\nEnter the lower bit of a valid EEPROM address to read from: ");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
@@ -198,21 +198,21 @@ void ReadEEPROM(void)
 
 void WriteEEPROM(void)
 {
-	UART_Puts("\nEnter the upper bit of a valid EEPROM address to write to: ");
+	UART_Puts("\r\nEnter the upper bit of a valid EEPROM address to write to: ");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
 		UART_Get();
 	}
 	addressH = ASCII;
-	UART_Puts("\nEnter the lower bit of a valid EEPROM address to write to: ");
+	UART_Puts("\r\nEnter the lower bit of a valid EEPROM address to write to: ");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
 		UART_Get();
 	}
 	addressL = ASCII;
-	UART_Puts("\nEnter the data to be stored: ");
+	UART_Puts("\r\nEnter the data to be stored: ");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
@@ -220,7 +220,7 @@ void WriteEEPROM(void)
 	}
 	eepromData = ASCII;
 	EEPROM_Write();
-	UART_Puts("\nThe data has been successfully written to the desired EEPROM address");
+	UART_Puts("\r\nThe data has been successfully written to the desired EEPROM address");
 }
 
 void USART(void)
@@ -237,8 +237,8 @@ void USART(void)
 
 void ChangeBaud(void)
 {
-	UART_Puts("\nWhat Baud Rate would you like?\n");
-	UART_Puts("(1)4800\n(2)9600\n(3)14400\n(4)19200\n(5)38400\n(6)57600");
+	UART_Puts("\r\nWhat Baud Rate would you like?\n");
+	UART_Puts("\r\n(1)4800\r\n(2)9600\r\n(3)14400\r\n(4)19200\r\n(5)38400\r\n(6)57600");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
@@ -247,38 +247,39 @@ void ChangeBaud(void)
 	switch(ASCII)
 	{
 		case '1':
-			UART_Puts("\nBaud rate successfully changed to 4800");
+			UART_Puts("\r\nBaud rate successfully changed to 4800");
 			Baud4800();
 		break;
 		case '2':
-			UART_Puts("\nBaud rate successfully changed to 9600");
+			UART_Puts("\r\nBaud rate successfully changed to 9600");
 			Baud9600();
 		break;
 		case '3':
-			UART_Puts("\nBaud rate successfully changed to 14400");
+			UART_Puts("\r\nBaud rate successfully changed to 14400");
 			Baud14400();
 		break;
 		case '4':
-			UART_Puts("\nBaud rate successfully changed to 19200");
+			UART_Puts("\r\nBaud rate successfully changed to 19200");
 			Baud19200();
 		break;
 		case '5':
-			UART_Puts("\nBaud rate successfully changed to 38400");
+			UART_Puts("\r\nBaud rate successfully changed to 38400");
 			Baud38400();
 		break;
 		case '6':
-			UART_Puts("\nBaud rate successfully changed to 57600");
+			UART_Puts("\r\nBaud rate successfully changed to 57600");
 			Baud57600();
 		break;
 		default:
-		UART_Puts(MS5);
+			UART_Puts(MS5);
+			ChangeBaud();
 		break;
 	}
 }
 
 void ChangeDataBits(void)
 {
-	UART_Puts("\nHow many data bits are desired? (5,6,7,8,9)");
+	UART_Puts("\r\nHow many data bits are desired? (5,6,7,8,9)");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
@@ -289,36 +290,38 @@ void ChangeDataBits(void)
 		case '5':
 			UCSR0C |= (0<<1)&&(0<<2);
 			UCSR0B |= (0<<2);
-			UART_Puts("\nNumber of data bits has been changed to 5");
+			UART_Puts("\r\nNumber of data bits has been changed to 5");
 		break;
 		case '6':
 			UCSR0C |= (1<<1)&&(0<<2);
 			UCSR0B |= (0<<2);
-			UART_Puts("\nNumber of data bits has been changed to 6");
+			UART_Puts("\r\nNumber of data bits has been changed to 6");
 		break;
 		case '7':
 			UCSR0C |= (0<<1)&&(1<<2);
 			UCSR0B |= (0<<2);
-			UART_Puts("\nNumber of data bits has been changed to 7");
+			UART_Puts("\r\nNumber of data bits has been changed to 7");
 		break;
 		case '8':
 			UCSR0C |= (1<<1)&&(1<<2);
 			UCSR0B |= (0<<2);
-			UART_Puts("\nNumber of data bits has been changed to 8");
+			UART_Puts("\r\nNumber of data bits has been changed to 8");
 		break;
 		case '9':
 			UCSR0C |= (1<<1)&&(1<<2);
 			UCSR0B |= (1<<2);
-			UART_Puts("\nNumber of data bits has been changed to 9");
+			UART_Puts("\r\nNumber of data bits has been changed to 9");
 		break;
 		default:
 			UART_Puts(MS5);
+			ChangeDataBits();
+		break;
 	}
 }
 
 void ChangeParity(void)
 {
-	UART_Puts("\nSelect a parity:\n(1)None\n(2)Odd\n(3)Even");
+	UART_Puts("\r\nSelect a parity:\r\n(1)None\r\n(2)Odd\r\n(3)Even");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
@@ -328,25 +331,26 @@ void ChangeParity(void)
 	{
 		case '1':
 			UCSR0C |= (0<<5)&&(0<<4);
-			UART_Puts("\nNo parity was set");
+			UART_Puts("\r\nNo parity was set");
 		break;
 		case '2':
 			UCSR0C |= (1<<5)&&(1<<4);
-			UART_Puts("\nAn odd parity was set");
+			UART_Puts("\r\nAn odd parity was set");
 		break;
 		case '3':
 			UCSR0C |= (1<<5)&&(0<<4);
-			UART_Puts("\nAn even parity was set");
+			UART_Puts("\r\nAn even parity was set");
 		break;
 		default:
 			UART_Puts(MS5);
+			ChangeParity();
 		break;
 	}
 }
 
 void ChangeStopBits(void)
 {
-	UART_Puts("\nSelect how many stop bits are desired: 1 or 2");
+	UART_Puts("\r\nSelect how many stop bits are desired: 1 or 2");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
@@ -356,14 +360,15 @@ void ChangeStopBits(void)
 	{
 		case '1':
 			UCSR0C |= (1<<3);
-			UART_Puts("\nOne stop bit will be provided");
+			UART_Puts("\r\nOne stop bit will be provided");
 		break;
 		case '2':
 			UCSR0C |= (0<<3);
-			UART_Puts("\nTwo stop bits will be provided");
+			UART_Puts("\r\nTwo stop bits will be provided");
 		break;
 		default:
 			UART_Puts(MS5);
+			ChangeStopBits();
 		break;
 	}
 }
