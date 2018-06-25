@@ -45,6 +45,8 @@
 .global addrH
 .global addrL
 .global eepromData
+.global baudH
+.global baudL
 
 .set	temp,0				//Sets the value of temp to 0, can be changed later
 
@@ -68,7 +70,7 @@ Mega328P_Init:
 		sts	ADCSRA,r16		//stores 0x87 into ADC configuration SRAM  location
 		ldi r16,0x40		//Loads 0x40 into r16
 		sts ADMUX,r16		//Stores the value of r16 into the ADC multiplexer selection memory space in SRAM
-		ldi r16,0			//Loads 0 into r16
+		ldi r16,7			//Loads 0 into r16
 		sts ADCSRB,r16		//Stores 0 into ADCSRB memory space which puts ADC in free roaming mode
 		ldi r16,0xFE		//Loads 0xFE int r16
 		sts DIDR0,r16		//Stores 0xFE into DIDR0 which is the data input disable register
@@ -92,6 +94,7 @@ LCD_Write_Command:
 	call	UART_On			//student comment here
 	ret						//student comment here
 
+.global LCD_Delay
 LCD_Delay:
 	ldi		r16,0xFA		//student comment here
 D0:	ldi		r17,0xFF		//student comment here
@@ -160,6 +163,12 @@ UART_Get:
 	sts		ASCII,r16			//student comment here
 	ret							//student comment here
 
+.global UART_Poll
+UART_Poll:
+	lds		r16, UDR0
+	sts		ASCII, r16
+	ret
+
 .global UART_Put
 UART_Put:
 	lds		r17,UCSR0A			//student comment here
@@ -171,7 +180,7 @@ UART_Put:
 
 .global ADC_Get
 ADC_Get:
-		ldi		r16,0xC7			//student comment here
+		ldi		r16,0xE7			//student comment here
 		sts		ADCSRA,r16			//student comment here
 A2V1:	lds		r16,ADCSRA			//student comment here
 		sbrc	r16,ADSC			//student comment here
@@ -209,51 +218,11 @@ EEPROM_Read:
 		in      r16,EEDR		; Read data from Data Register
 		sts		ASCII,r16  
 		ret
-.global	Baud4800
-Baud4800:
+.global BaudChange
+BaudChange:
 		out		U2X0, r16
-		ldi		r17, 0x0
-		ldi		r16, 0xCF		;Value chosen based on ATmega328pb data sheet
-		sts		UBRR0H, r17
-		sts		UBRR0L, r16
-		ret
-.global Baud9600
-Baud9600:
-		out		U2X0, r16
-		ldi		r17, 0x0
-		ldi		r16, 0x67
-		sts		UBRR0H, r17
-		sts		UBRR0L, r16
-		ret
-.global	Baud14400
-Baud14400:
-		out		U2X0, r16
-		ldi		r17, 0x0
-		ldi		r16, 0x44
-		sts		UBRR0H, r17
-		sts		UBRR0L, r16
-		ret
-.global	Baud19200
-Baud19200:
-		out		U2X0, r16
-		ldi		r17, 0x0
-		ldi		r16, 0x33
-		sts		UBRR0H, r17
-		sts		UBRR0L, r16
-		ret
-.global Baud38400
-Baud38400:
-		out		U2X0, r16
-		ldi		r17, 0x0
-		ldi		r16, 0x19
-		sts		UBRR0H, r17
-		sts		UBRR0L, r16
-		ret
-.global	Baud57600
-Baud57600:
-		out		U2X0, r16
-		ldi		r17, 0x0
-		ldi		r16, 0x10
+		lds		r17, baudH
+		lds		r16, baudL
 		sts		UBRR0H, r17
 		sts		UBRR0L, r16
 		ret

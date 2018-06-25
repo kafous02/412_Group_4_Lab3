@@ -36,6 +36,7 @@ void EEPROM_Read(void);
 void EEPROM_Write(void);
 void USART(void);
 void ChangeBaud(void);
+void BaudChange(void);
 void ChangeBaudAux(unsigned int);
 void Baud4800(void);
 void Baud9600(void);
@@ -58,6 +59,8 @@ char LADC;						//shared ADC variable with Assembly
 char addrH;
 char addrL;
 char eepromData;
+char baudH;
+char baudL;
 unsigned char UBRR0H;
 unsigned char UBRR0L;
 unsigned int UBBR;
@@ -259,33 +262,39 @@ void ChangeBaud(void)
 	{
 		case '1':
 			UART_Puts("\r\nBaud rate successfully changed to 4800");
-			ChangeBaudAux(4800);
-			Baud4800();
+			baudH = 0;								
+			baudL = 207;						//value from datasheet for this baud rate
+			BaudChange();
 		break;
 		case '2':
 			UART_Puts("\r\nBaud rate successfully changed to 9600");
-			ChangeBaudAux(9600);
-			Baud9600();
+			baudH = 0;
+			baudL = 103;						//value from datasheet for this baud rate
+			BaudChange();
 		break;
 		case '3':
 			UART_Puts("\r\nBaud rate successfully changed to 14400");
-			ChangeBaudAux(14400);
-			Baud14400();
+			baudH = 0;
+			baudL = 68;							//value from datasheet for this baud rate
+			BaudChange();
 		break;
 		case '4':
 			UART_Puts("\r\nBaud rate successfully changed to 19200");
-			ChangeBaudAux(19200);
-			Baud19200();
+			baudH = 0;
+			baudL = 51;							//value from datasheet for this baud rate
+			BaudChange();
 		break;
 		case '5':
 			UART_Puts("\r\nBaud rate successfully changed to 38400");
-			ChangeBaudAux(38400);
-			Baud38400();
+			baudH = 0;
+			baudL = 25;							//value from datasheet for this baud rate
+			BaudChange();
 		break;
 		case '6':
 			UART_Puts("\r\nBaud rate successfully changed to 57600");
-			ChangeBaudAux(57600);
-			Baud57600();
+			baudH = 0;
+			baudL = 16;							//value from datasheet for this baud rate
+			BaudChange();
 		break;
 		default:
 			UART_Puts(MS5);
