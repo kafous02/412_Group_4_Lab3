@@ -42,8 +42,8 @@
 .global ASCII				//Makes symbol ASCII visible to ld, makes label externally available to the linker
 .global DATA				//Makes symbol DATA visible to ld, makes label externally available to the linker
 
-.global addressH
-.global addressL
+.global addrH
+.global addrL
 .global eepromData
 
 .set	temp,0				//Sets the value of temp to 0, can be changed later
@@ -186,8 +186,8 @@ A2V1:	lds		r16,ADCSRA			//student comment here
 EEPROM_Write:      
 		sbic    EECR,EEPE
 		rjmp    EEPROM_Write		; Wait for completion of previous write
-		lds		r18,addressH			; Set up address (r18:r17) in address register
-		lds		r17,addressL
+		lds		r18,addrH			; Set up address (r18:r17) in address register
+		lds		r17,addrL
 		lds		r16,eepromData				; Set up data in r16    
 		out     EEARH, r18      
 		out     EEARL, r17			      
@@ -200,8 +200,8 @@ EEPROM_Write:
 EEPROM_Read:					    
 		sbic    EECR,EEPE    
 		rjmp    EEPROM_Read		; Wait for completion of previous write
-		lds		r18,addressH		; Set up address (r18:r17) in EEPROM address register
-		lds		r17,addressL
+		lds		r18,addrH		; Set up address (r18:r17) in EEPROM address register
+		lds		r17,addrL
 		ldi		r16,0x00   
 		out     EEARH, r18   
 		out     EEARL, r17		   
@@ -211,48 +211,48 @@ EEPROM_Read:
 		ret
 .global	Baud4800
 Baud4800:
-		;out		U2X0, r16
-		;ldi		r17, 0
-		;ldi		r16, 0xCF		;Value chosen based on ATmega328pb data sheet
-		;sts		UBRR0H, r17
-		;sts		UBRR0L, r16
+		out		U2X0, r16
+		ldi		r17, 0x0
+		ldi		r16, 0xCF		;Value chosen based on ATmega328pb data sheet
+		sts		UBRR0H, r17
+		sts		UBRR0L, r16
 		ret
 .global Baud9600
 Baud9600:
-		;out		U2X0, r16
-		ldi		r17, 0
+		out		U2X0, r16
+		ldi		r17, 0x0
 		ldi		r16, 0x67
 		sts		UBRR0H, r17
 		sts		UBRR0L, r16
 		ret
 .global	Baud14400
 Baud14400:
-		;out		U2X0, r16
-		ldi		r17, 0
+		out		U2X0, r16
+		ldi		r17, 0x0
 		ldi		r16, 0x44
 		sts		UBRR0H, r17
 		sts		UBRR0L, r16
 		ret
 .global	Baud19200
 Baud19200:
-		;out		U2X0, r16
-		ldi		r17, 0
-		ldi		r16, 0x44
+		out		U2X0, r16
+		ldi		r17, 0x0
+		ldi		r16, 0x33
 		sts		UBRR0H, r17
 		sts		UBRR0L, r16
 		ret
 .global Baud38400
 Baud38400:
-		;out		U2X0, r16
-		ldi		r17, 0
+		out		U2X0, r16
+		ldi		r17, 0x0
 		ldi		r16, 0x19
 		sts		UBRR0H, r17
 		sts		UBRR0L, r16
 		ret
 .global	Baud57600
 Baud57600:
-		;out		U2X0, r16
-		ldi		r17, 0
+		out		U2X0, r16
+		ldi		r17, 0x0
 		ldi		r16, 0x10
 		sts		UBRR0H, r17
 		sts		UBRR0L, r16

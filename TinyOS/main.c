@@ -36,6 +36,7 @@ void EEPROM_Read(void);
 void EEPROM_Write(void);
 void USART(void);
 void ChangeBaud(void);
+void ChangeBaudAux(unsigned int);
 void Baud4800(void);
 void Baud9600(void);
 void Baud14400(void);
@@ -54,9 +55,12 @@ unsigned int UCSR0B;
 unsigned int UCSR0C;
 char HADC;						//shared ADC variable with Assembly
 char LADC;						//shared ADC variable with Assembly
-char addressH;
-char addressL;
+char addrH;
+char addrL;
 char eepromData;
+unsigned char UBRR0H;
+unsigned char UBRR0L;
+unsigned int UBBR;
 
 char volts[5];					//string buffer for ADC output
 int Acc;						//Accumulator for ADC use
@@ -185,15 +189,16 @@ void ReadEEPROM(void)
 	{
 		UART_Get();
 	}
-	addressH = ASCII;
+	addrH = ASCII;
 	UART_Puts("\r\nEnter the lower bit of a valid EEPROM address to read from: ");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
 		UART_Get();
 	}
-	addressL = ASCII;
+	addrL = ASCII;
 	EEPROM_Read();
+	UART_Put();
 }
 
 void WriteEEPROM(void)
@@ -204,14 +209,14 @@ void WriteEEPROM(void)
 	{
 		UART_Get();
 	}
-	addressH = ASCII;
+	addrH = ASCII;
 	UART_Puts("\r\nEnter the lower bit of a valid EEPROM address to write to: ");
 	ASCII = '\0';
 	while(ASCII == '\0')
 	{
 		UART_Get();
 	}
-	addressL = ASCII;
+	addrL = ASCII;
 	UART_Puts("\r\nEnter the data to be stored: ");
 	ASCII = '\0';
 	while(ASCII == '\0')
@@ -235,6 +240,12 @@ void USART(void)
 	ChangeStopBits();
 }
 
+void ChangeBaudAux(unsigned int UBBR)
+{
+	UBRR0H = (unsigned char)(UBBR>>8);
+	UBRR0L = (unsigned char)UBBR;
+}
+
 void ChangeBaud(void)
 {
 	UART_Puts("\r\nWhat Baud Rate would you like?\n");
@@ -248,26 +259,32 @@ void ChangeBaud(void)
 	{
 		case '1':
 			UART_Puts("\r\nBaud rate successfully changed to 4800");
+			ChangeBaudAux(4800);
 			Baud4800();
 		break;
 		case '2':
 			UART_Puts("\r\nBaud rate successfully changed to 9600");
+			ChangeBaudAux(9600);
 			Baud9600();
 		break;
 		case '3':
 			UART_Puts("\r\nBaud rate successfully changed to 14400");
+			ChangeBaudAux(14400);
 			Baud14400();
 		break;
 		case '4':
 			UART_Puts("\r\nBaud rate successfully changed to 19200");
+			ChangeBaudAux(19200);
 			Baud19200();
 		break;
 		case '5':
 			UART_Puts("\r\nBaud rate successfully changed to 38400");
+			ChangeBaudAux(38400);
 			Baud38400();
 		break;
 		case '6':
 			UART_Puts("\r\nBaud rate successfully changed to 57600");
+			ChangeBaudAux(57600);
 			Baud57600();
 		break;
 		default:
@@ -391,6 +408,7 @@ void Command(void)					//command interpreter
 		case 'E' | 'e': EEPROM();
 		break;
 		case 'U' | 'u': USART();
+		break;
 		default:
 		UART_Puts(MS5);
 		HELP();
