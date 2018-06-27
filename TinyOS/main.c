@@ -36,14 +36,14 @@ void UART_Poll(void);
 void substring(char*, char*, int);
 void scrollingLCD(char*);
 void LCD_Delay(void);
-void ChangeBaud(void);
-void BaudChange(void);
-void ChangeBaudAux(unsigned int);
-void ChangeDataBits(void);
-void ChangeParity(void);
-void ChangeStopBits(void);
+void printState(void);
 void WriteEEPROM(void);
 void ReadEEPROM(void);
+void ChangeStopBits(void);
+void ChangeParity(void);
+void ChangeDataBits(void);
+void ChangeBaud(void);
+void BaudChange(void);
 
 unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
@@ -60,10 +60,13 @@ unsigned char UBRR0H;
 unsigned char UBRR0L;
 unsigned int UBBR;
 
-char lastTemperature[5] = "     ";
-char temperature[5];					//string buffer for ADC output
-int Acc;								//Accumulator for ADC use
+char lastTemperature[7] = "       ";
+char temperature[7];					//string buffer for ADC output
+int Acc;						//Accumulator for ADC use
 int isADC;
+int isScroll;
+int incrementer;
+
 
 void UART_Puts(const char *str)	//Display a string in the PC Terminal Program
 {
@@ -109,9 +112,10 @@ void LCD(void)						//Lite LCD demo
 	DATA = 0x0f;					//Student Comment Here
 	LCD_Write_Command();
 	
-	char message[50] = "Group 4 is the best group in the world. ";
+	char message[50] = "Group 4 Group 4 Group 4 Group 4 ";
 	
 	scrollingLCD(message);
+		
 	
 	/*
 	Re-engineer this subroutine to have the LCD endlessly scroll a marquee sign of 
@@ -121,31 +125,53 @@ void LCD(void)						//Lite LCD demo
 	*/
 }
 
-void scrollingLCD(char * message) {
-	
-	int exitScroll = 1;
-	int incrementer = 0;	
+void scrollingLCD(char * message) 
+{
+	isScroll = 1;
 
 	int sizeOfOrigin = strlen(message);
 	
-	while(exitScroll) {
+	char destination[17] = "                ";
 		
-		char destination[17] = "                ";
+	int input = incrementer % sizeOfOrigin;
+	substring(message, destination, input);
 		
-		int input = incrementer % sizeOfOrigin;
-		substring(message, destination, input);
-		
-		LCD_Puts(destination);
-		
-		for(int iter = 0; iter < 5000; iter++){}
+	LCD_Puts(destination);
 			
-		UART_Poll();
-		if(incrementer == 25){
-			exitScroll = 0;
-			break;
-		}	
-		incrementer++;
+	LCD_Delay();
+				
+	UART_Poll();
+	if(ASCII == 'x'){
+		isScroll = 0;
+		incrementer = 0;
+		return;		
 	}
+	
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+
+	incrementer++;
+	return;
 }
 
 void substring(char *origin, char *destination, int arStart){
@@ -169,15 +195,15 @@ void substring(char *origin, char *destination, int arStart){
 void ADC(void)						//Lite Demo of the Analog to Digital Converter
 {
 	isADC = 1;
-		
-	ADC_Get();		
-		
+	
+	ADC_Get();
+	
 	double celsius = 0;
 	double kelvin = 0;
 	int fahrenheit = 0;
-		
+	
 	Acc = (((int)HADC) * 0x100 + (int)(LADC));
-		
+	
 	double r = (10000.0 * ((double)Acc))/(1024.0 - ((double)Acc));
 	const double t0 = 295.37;
 	const double B = 3950.0;
@@ -188,14 +214,16 @@ void ADC(void)						//Lite Demo of the Analog to Digital Converter
 
 	celsius = kelvin - 273.15;
 	
-	fahrenheit = floor(celsius*(9.0/5.0) + 32.0);
+	fahrenheit = 10 * (celsius*(9.0/5.0) + 32.0);
 	
-	char f0 = (fahrenheit/100) + '0';
+	char f0 = floor((fahrenheit/1000)) + '0';
+	fahrenheit = fahrenheit % 1000;
+	char f1 = floor((fahrenheit/100)) + '0';
 	fahrenheit = fahrenheit % 100;
-	char f1 = (fahrenheit/10) + '0';
+	char f2 = floor(fahrenheit/10) + '0';
 	fahrenheit = fahrenheit % 10;
-	char f2 = fahrenheit + '0';
-
+	char f3 = floor(fahrenheit) + '0';
+	
 	if(f0 == '0'){
 		f0 = ' ';
 	}
@@ -203,29 +231,44 @@ void ADC(void)						//Lite Demo of the Analog to Digital Converter
 	temperature[0] = f0;
 	temperature[1] = f1;
 	temperature[2] = f2;
-	temperature[3] = 167;
-	temperature[4] = 0;
+	temperature[3] = 46;
+	temperature[4] = f3;
+	temperature[5] = 167;
+	temperature[6] = 0;
 	
 	if(strcmp(lastTemperature, temperature) != 0){
+		
+		UART_Puts("          \r");
+		UART_Puts(temperature);
+		UART_Puts(" F\r");
+		
+		strcpy(lastTemperature, temperature);
+	}
 	
-	UART_Puts(temperature);
-	UART_Puts(" F\r");
-		
-	strcpy(lastTemperature, temperature);
-	}
-		
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	LCD_Delay();
+	
 	UART_Poll();
-	if(ASCII == 'x'){
+	
+	if((ASCII == 'x') && (incrementer > 50)){
 		isADC = 0;
+		strcpy(lastTemperature, "     ");
+		strcpy(temperature, "     ");
+		incrementer = 0;
+		
 	}
-
+	
+	incrementer++;
+	
 	/*
 		Re-engineer this subroutine to display temperature in degrees Fahrenheit on the Terminal.
 		The potentiometer simulates a thermistor, its varying resistance simulates the
 		varying resistance of a thermistor as it is heated and cooled. See the thermistor
 		equations in the lab 3 folder. User must always be able to return to command line.
 	*/
-	
+	return;
 }
 
 void EEPROM(void)
@@ -481,16 +524,21 @@ void ChangeStopBits(void)
 
 void Command(void)					//command interpreter
 {
-	if(!isADC){
-		UART_Puts(MS3);	
-		ASCII = '\0';						
-		while (ASCII == '\0')
-		{
-			UART_Get();
-		}
-	}
-	else {
+	
+	if(isADC){
 		ASCII = 'a';
+	}
+	else if(isScroll){
+		ASCII = 'l';
+	}
+	else if((isScroll != 1) && (isADC != 1)){
+		
+		UART_Puts(MS3);
+		ASCII = '\0';
+		while (ASCII == '\0'){
+			UART_Get();
+
+		}
 	}
 	switch (ASCII)
 	{
@@ -507,8 +555,8 @@ void Command(void)					//command interpreter
 		default:
 		UART_Puts(MS5);
 		HELP();
-		break;  			//Add a 'USART' command and subroutine to allow the user to reconfigure the 						
-							//serial port parameters during runtime. Modify baud rate, # of data bits, parity, 							
+		break;  			//Add a 'USART' command and subroutine to allow the user to reconfigure the
+							//serial port parameters during runtime. Modify baud rate, # of data bits, parity,
 							//# of stop bits.
 	}
 }
@@ -518,6 +566,9 @@ int main(void)
 	Mega328P_Init();
 	Banner();
 	isADC =  0;
+	isScroll = 0;
+	incrementer = 0;
+
 	while (1)
 	{
 		Command();				//infinite command loop
