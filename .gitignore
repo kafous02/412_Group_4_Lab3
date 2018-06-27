@@ -1,0 +1,24 @@
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+*.lss
+*.atsuo
+*.srec
+*.d
+*.eep
+*.mk
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
