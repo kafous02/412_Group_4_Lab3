@@ -90,7 +90,7 @@ LCD_Write_Command:
 
 .global LCD_Delay
 LCD_Delay:
-	ldi		r16,0xFA		//Load constant 250 into r16
+	ldi		r16,0xFF		//Load constant 250 into r16
 D0:	ldi		r17,0xFF		//Load constant 255 into r17
 D1:	dec		r17				//Decrement r17
 	brne	D1				//Branch back to D1 while it's still not 0.
@@ -170,6 +170,7 @@ UART_Put:
 	rjmp	UART_Put			//Loop back to start while UDRE0 = 1
 	lds		r16,ASCII			//Load Label ASCII into r16
 	sts		UDR0,r16			//Move ASCII from r16 to USART Data Register
+	sts		UDR0,0x00			
 	ret							//End of UART_Put
 
 .global ADC_Get
